@@ -1,18 +1,60 @@
 <?php
 
 class Configuration{
-	private static final $dbHost = 'localhost';	//Data base host
-	private static final $dbUser = 'root';		//User name to connect to the DB
-	private static final $dbPass = 'root';		//Password
-	private static final $dbName = 'busRoute';	//DB Name
-	
-	private static $dbCon;
-	
-	public static function getDBCon() {
-		if($dbCon == null){
-			$dbCon = new mysqli($dbHost, $dbUser, $dbPass, $dbName);
+
+	private $connection;
+	private $query;
+	private $result;
+
+	public function connect()
+	{
+		//connection parameters
+		$host = 'localhost';
+		$user = 'root';
+		$password = 'root';
+		$database = 'busRoute';
+
+		//create new mysqli connection
+		$this->connection = new mysqli($host , $user , $password , $database);
+	}
+
+	public function disconnect(){
+		$this->connection->close();
+		return TRUE;
+	}
+
+	public function prepare($query){
+		$this->query = $this->connection->prepare($query);
+		return TRUE;
+	}
+
+	public function query(){
+		if (isset($this->query)){
+			$this->result = $this->connection->query($this->query);
+			return TRUE;
 		}
-		return $dbCon;
+		return FALSE;
+	}
+
+	public function fetch($type = 'object'){
+		if (isset($this->result))
+		{
+			switch ($type)
+			{
+				case 'array':
+					$row = $this->result->fetch_array();
+					break;
+				case 'object':
+
+				default:
+					$row = $this->result->fetch_object();
+					break;
+			}
+
+			return $row;
+		}
+
+		return FALSE;
 	}
 }
 
