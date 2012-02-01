@@ -1,6 +1,6 @@
 <?php
 
-class Configuration{
+class DBAccess{
 
 	private $connection;
 	private $query;
@@ -55,6 +55,15 @@ class Configuration{
 		}
 
 		return FALSE;
+	}
+	
+	public function getResults($query, $type='object') {
+		$this->connect();
+		$this->prepare($query);
+		$this->query();
+		$result = $this->fetch($type);
+		$this->disconnect();
+		return $result;
 	}
 }
 
