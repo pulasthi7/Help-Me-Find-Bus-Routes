@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 3.2.0.1
+-- version 3.4.9
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 25, 2012 at 07:40 AM
--- Server version: 5.1.36
--- PHP Version: 5.3.0
+-- Generation Time: Mar 10, 2012 at 10:06 PM
+-- Server version: 5.5.20
+-- PHP Version: 5.3.10
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -16,7 +17,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `busroute`
+-- Database: `busRoute`
 --
 
 -- --------------------------------------------------------
@@ -26,18 +27,14 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 
 CREATE TABLE IF NOT EXISTS `halt` (
-  `id` int(11) NOT NULL,
-  `name` varchar(10) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
   `latitude` double NOT NULL,
   `longitude` double NOT NULL,
-  `alias` varchar(10) NOT NULL,
+  `alias` varchar(30) DEFAULT NULL,
   `special` tinyint(1) NOT NULL,
-  KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `halt`
---
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 
 -- --------------------------------------------------------
@@ -47,18 +44,29 @@ CREATE TABLE IF NOT EXISTS `halt` (
 --
 
 CREATE TABLE IF NOT EXISTS `route` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `number` varchar(6) NOT NULL,
   `start_id` int(11) NOT NULL,
   `end_id` int(11) NOT NULL,
-  KEY `end_id` (`end_id`),
-  KEY `start_id` (`start_id`)
+  `description` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `start_id` (`start_id`,`end_id`),
+  KEY `end_id` (`end_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rt_hlt`
+--
+
+CREATE TABLE IF NOT EXISTS `rt_hlt` (
+  `halt_id` int(11) NOT NULL,
+  `route_id` int(11) NOT NULL,
+  KEY `halt_id` (`halt_id`,`route_id`),
+  KEY `route_id` (`route_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `route`
---
-
 
 --
 -- Constraints for dumped tables
@@ -68,5 +76,16 @@ CREATE TABLE IF NOT EXISTS `route` (
 -- Constraints for table `route`
 --
 ALTER TABLE `route`
-  ADD CONSTRAINT `route_ibfk_1` FOREIGN KEY (`start_id`) REFERENCES `halt` (`id`),
-  ADD CONSTRAINT `route_ibfk_2` FOREIGN KEY (`end_id`) REFERENCES `halt` (`id`);
+  ADD CONSTRAINT `route_ibfk_1` FOREIGN KEY (`start_id`) REFERENCES `halt` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `route_ibfk_2` FOREIGN KEY (`end_id`) REFERENCES `halt` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `rt_hlt`
+--
+ALTER TABLE `rt_hlt`
+  ADD CONSTRAINT `rt_hlt_ibfk_1` FOREIGN KEY (`halt_id`) REFERENCES `halt` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `rt_hlt_ibfk_2` FOREIGN KEY (`route_id`) REFERENCES `route` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
