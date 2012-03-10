@@ -33,21 +33,26 @@ class DBAccess{
 	}
 
 	public function fetch($type = 'object'){
+		$rows = array();
 		if (isset($this->result))
 		{
 			switch ($type)
 			{
 				case 'array':
-					$row = $this->result->fetch_array();
+					while($row = $this->result->fetch_array()){
+						$rows[] = $row;
+					}					 
 					break;
 				case 'object':
 
 				default:
-					$row = $this->result->fetch_object();
+					while($row = $this->result->fetch_object()){
+						$rows[] = $row;
+					}
 					break;
 			}
 
-			return $row;
+			return $rows;
 		}
 
 		return FALSE;
