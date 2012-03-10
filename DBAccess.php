@@ -20,11 +20,7 @@ class DBAccess{
 
 	public function disconnect(){
 		$this->connection->close();
-		return TRUE;
-	}
-
-	public function prepare($query){
-		$this->query = $this->connection->prepare($query);
+		unset($this->result);
 		return TRUE;
 	}
 
@@ -59,11 +55,18 @@ class DBAccess{
 	
 	public function getResults($query, $type='object') {
 		$this->connect();
-		$this->prepare($query);
+		$this->query = $query;
 		$this->query();
 		$result = $this->fetch($type);
 		$this->disconnect();
 		return $result;
+	}
+	
+	public function doUpdateQuery($query) {
+		$this->query = $query;
+		$this->connect();
+		$this->query();
+		$this->disconnect();
 	}
 }
 
