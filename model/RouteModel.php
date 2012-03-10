@@ -25,14 +25,14 @@ class RouteModel{
 	public function getRoutesForSelectField($node_id=NULL) {
 		$query;
 		if($node_id){
-			$query = "SELECT * from route where start_id=".$node_id." OR end_id=".$node_id;
+			$query = "SELECT id,description from route where start_id=".$node_id." OR end_id=".$node_id;
 		} else{
-			$query = "SELECT * from route";
+			$query = "SELECT id,description from route";
 		}
 		$results = $this->db->getResults($query,"array");
 		$resultString = "";
 		foreach ($results as $route) {
-			$resultString = $resultString."<option value=".$route["id"].">".$route["number"]."</option>";
+			$resultString = $resultString."<option value=".$route["id"].">".$route["description"]."</option>";
 		}
 		return $resultString;
 	}
