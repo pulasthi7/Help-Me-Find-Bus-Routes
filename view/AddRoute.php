@@ -1,3 +1,4 @@
+<?php include_once '../model/HaltModel.php';?>
 <html>
 <head>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
@@ -21,13 +22,25 @@
 					<tr>
 						<td><label for="rt_start">Start From</label>
 						</td>
-						<td><input name="rt_start" id="rt_s" type="text"/>
+						<td>
+							<select name="rt_start" id="rt_s">
+							<?php							
+							$halt_model = new HaltModel();
+							echo $halt_model->getHaltsForSelectField();
+							?>
+							</select>
 						</td>
 					</tr>
 					<tr>
 						<td><label for="rt_end">Ends At</label>
 						</td>
-						<td><input name="rt_end" id="rt_e" type="text"/>
+						<td>
+							<select name="rt_end" id="rt_e">
+							<?php							
+							$halt_model = new HaltModel();
+							echo $halt_model->getHaltsForSelectField();
+							?>
+							</select>
 						</td>
 					</tr>
 					<tr></tr>

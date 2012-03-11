@@ -1,7 +1,7 @@
 <?php
 include_once '../model/HaltModel.php';
 include_once '../model/RouteModel.php';
-include_once '../model/finders/ListedNode.php';
+include_once '../model/finders/BusTour.php';
 
 class Finder {
 	private $openRoutes;
@@ -24,7 +24,7 @@ class Finder {
 		foreach ($nodes as $node) {
 			if (!array_key_exists($node['id'], $this->closedNodes)) {
 				if(!array_key_exists($node['id'], $this->openNodes)){
-					$this->openNodes[$node['id']] = new ListedHalt($node['id'], $this->openRoutes[$routeID]->getID(), $routeID);
+					$this->openNodes[$node['id']] = new BusTour($node['id'], $this->openRoutes[$routeID]->getID(), $routeID);
 				}
 			}
 		}
@@ -46,7 +46,7 @@ class Finder {
 
 	public function findRoute($from, $to) {
 		$this->init();
-		$this->openNodes[$from] = new ListedHalt($from, NULL, NULL);
+		$this->openNodes[$from] = new BusTour($from, NULL, NULL);
 		$routeFound = false;
 		while($currentNode=array_shift($this->openNodes)) {
 			$this->closeNode($currentNode);

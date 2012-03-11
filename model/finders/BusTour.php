@@ -1,5 +1,5 @@
 <?php
-class ListedHalt{
+class BusTour{
 	private $haltId;
 	private $haltCameFrom;
 	private $routeCameFrom;
@@ -10,7 +10,7 @@ class ListedHalt{
 	 * @param int $from ID of the halt came from
 	 * @param int $along ID of the route came along
 	 */
-	public function ListedHalt($id, $from, $along) {
+	public function BusTour($id, $from, $along) {
 		$this->haltId = $id;
 		$this->haltCameFrom = $from;
 		$this->routeCameFrom = $along;
