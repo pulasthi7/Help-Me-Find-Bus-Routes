@@ -17,8 +17,8 @@ class HaltModel{
 	}
 	
 	public function getHaltsOf($route_id) {
-		$query = "SELECT halts.id from halts, rt_hlt WHERE rt_hlt.id=$nodeId";
-		return $this->db->getResults($query,'array');
+		$query = "SELECT halt.id from halt, rt_hlt WHERE rt_hlt.route_id=$route_id AND halt.id=rt_hlt.halt_id";
+		return $this->db->getResults($query,"array");
 	}
 	
 	public function getHaltsForSelectField() {

@@ -15,6 +15,10 @@ class ListedHalt{
 		$this->haltCameFrom = $from;
 		$this->routeCameFrom = $along;
 	}
+	
+	public function getID() {
+		return $this->haltId;
+	}
 
 	public  function getHaltCameFrom() {
 		return $this->haltCameFrom;

@@ -1,84 +1,61 @@
 <?php
-class ListedHalt{
-	private $haltId;
-	private $haltCameFrom;
-	private $routeCameFrom;
-	
-	/**
-	 * Constructor
-	 * @param int $id Halt ID
-	 * @param int $from ID of the halt came from
-	 * @param int $along ID of the route came along
-	 */
-	public function ListedHalt($id, $from, $along) {
-		$this->haltId = $id;
-		$this->haltCameFrom = $from;
-		$this->routeCameFrom = $along;
-	}
-	
-	public  function getHaltCameFrom() {
-		return $this->haltCameFrom;
-	}
-	
-	public function getRouteCameFrom() {
-		return $this->routeCameFrom;
-	}
-}
+include_once '../model/HaltModel.php';
+include_once '../model/RouteModel.php';
+include_once '../model/finders/ListedNode.php';
 
 class Finder {
 	private $openRoutes;
 	private $openNodes;
-	
+
 	private $closedRoutes;
 	private $closedNodes;
-	
+
 	private $nodeModel;
 	private $routeModel;
-	
+
 	public function Finder(){
-		
+
 		$this->nodeModel = new HaltModel();
 		$this->routeModel = new RouteModel();
 	}
-	
+
 	private function closeRoute($routeID) {
-		$nodes = $this->nodeModel->getHaltsOf($routeID);
+		$nodes = $this->nodeModel->getHaltsOf($routeID);		
 		foreach ($nodes as $node) {
-			if (!array_key_exists($node, $this->closedNodes)) {
-				if(!array_key_exists($node, $this->openNodes)){
-					$this->openNodes[$node] = new ListedHalt($node, $this->openRoutes[$routeID], $routeID);
+			if (!array_key_exists($node['id'], $this->closedNodes)) {
+				if(!array_key_exists($node['id'], $this->openNodes)){
+					$this->openNodes[$node['id']] = new ListedHalt($node['id'], $this->openRoutes[$routeID]->getID(), $routeID);
 				}
 			}
 		}
-		$this->closedRoutes[] = $routeID;
+		$this->closedRoutes[$routeID] = $routeID;
 		unset($this->openRoutes[$routeID]);
 	}
-	
-	private function closeNode($nodeID) {
-		$routes = $this->routeModel->getRoutesAcross($nodeID);
+
+	private function closeNode($node) {
+		$routes = $this->routeModel->getRoutesAcross($node->getID());
 		foreach ($routes as $route) {
-			if(!array_key_exists($route, $this->closedRoutes)){
-				if(!array_key_exists($route, $this->openRoutes)){
-					$this->openRoutes[$route] = $nodeID;
+			if(!array_key_exists($route['id'], $this->closedRoutes)){
+				if(!array_key_exists($route['id'], $this->openRoutes)){
+					$this->openRoutes[$route['id']] = $node;
 				}
 			}
 		}
-		$this->closedNodes[$nodeID] = $this->openNodes[$nodeID];
-		unset($this->openNodes[$nodeID]);
+		$this->closedNodes[$node->getID()] = $node;
 	}
-	
+
 	public function findRoute($from, $to) {
 		$this->init();
 		$this->openNodes[$from] = new ListedHalt($from, NULL, NULL);
 		$routeFound = false;
 		while($currentNode=array_shift($this->openNodes)) {
 			$this->closeNode($currentNode);
-			
-			foreach ($this->openRoutes as $currentRoute) {
-				$this->closeRoute($currentRoute);
+
+			foreach ($this->openRoutes as $route=>$from) {
+				$this->closeRoute($route);
 			}
-			
-			if (!isset($this->openNodes[$to])) {
+				
+			if (isset($this->openNodes[$to])) {
 				$routeFound = true;
 				break;
 			}
@@ -90,14 +67,14 @@ class Finder {
 		$this->releaseResources();
 		return $result;
 	}
-	
+
 	private function releaseResources(){
 		unset($this->closedNodes);
 		unset($this->closedRoutes);
 		unset($this->openNodes);
 		unset($this->openRoutes);
 	}
-	
+
 	private function buildPath($from, $to) {
 		$path = array();
 		$path[] = $this->openNodes[$to];
@@ -108,7 +85,7 @@ class Finder {
 		}
 		return $path;
 	}
-	
+
 	private function init() {
 		$this->closedNodes=array();
 		$this->closedRoutes = array();

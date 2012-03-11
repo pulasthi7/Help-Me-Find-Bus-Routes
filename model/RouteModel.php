@@ -8,18 +8,16 @@ class RouteModel{
 	}
 
 	public function getRoutesByID($id) {
-		$query = "SELECT * FROM routes WHERE routes.id=$id";
-		$this->db->connect();
-		$this->db->prepare($query);
-		$this->db->query();
-		$result = $this->db->fetch();
-		$this->db->disconnect();
-		return $result;
+		$query = "SELECT * FROM route WHERE route.id=$id";
+		$result = $this->db->getResults($query);
+		if($result){
+			return array_pop($result);
+		}
 	}
 
 	public function getRoutesAcross($nodeId) {
-		$query = "SELECT routes.id from routes, rt_hlt WHERE rt_hlt.id=$nodeId";
-		return $this->db->fetch('array');
+		$query = "SELECT route.id from route, rt_hlt WHERE rt_hlt.halt_id=$nodeId AND rt_hlt.route_id=route.id";
+		return $this->db->getResults($query,'array');
 	}
 
 	public function getRoutesForSelectField($node_id=NULL) {
