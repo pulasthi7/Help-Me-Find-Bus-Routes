@@ -1,4 +1,7 @@
 <?php
+/**
+ * Database Configurations
+ */
 
 class DBAccess{
 
