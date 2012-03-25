@@ -15,7 +15,7 @@
 				if($query) {
 				echo '<ul>';
 					while ($result = $query ->fetch_object()) {
-	         			echo '<li onClick="fill'.$_POST['number'].'(\''.addslashes($result->name).'\',\''.$result->longitude.'\',\''.$result->latitude.'\');">'.$result->name.'</li>';
+	         			echo '<li onClick="fill'.$_POST['number'].'(\''.addslashes($result->name).'\',\''.$result->longitude.'\',\''.$result->latitude.'\',\''.$result->id.'\');">'.$result->name.'</li>';
 	         		}
 				echo '</ul>';
 					

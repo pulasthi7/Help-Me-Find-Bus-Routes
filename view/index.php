@@ -24,8 +24,9 @@
                 }
             }
 
-            function fill1(thisValue,lng,lat) {
+            function fill1(thisValue,lng,lat,id) {
                 $('#txtbox1').val(thisValue); 
+                $('#txtboxfrmid').val(id);
 //                if(lng!=''||lat!=''){alert(lng+"hey"+lat);}
                 setMarker(lng,lat);
                
@@ -34,8 +35,10 @@
                
             }
 			
-			function fill2(thisValue,lng,lat) {
-                $('#txtbox2').val(thisValue);setMarker(lng,lat);
+			function fill2(thisValue,lng,lat,id) {
+                $('#txtbox2').val(thisValue);
+                $('#txtboxtoid').val(id);
+                setMarker(lng,lat);
                 setTimeout("$('#suggestions2').fadeOut();", 600);
                 
             }
@@ -241,14 +244,18 @@
                     <div class="frm_txt" id="frm_text_1"><input name="from" class="txtbox" id="txtbox1" size="25" type="text" onkeyup="suggest(this.value,1);" onblur="fill1();">
           <div class="suggestionsBox" id="suggestions1" style="display: none;"> 
                             <div class="suggestionList" id="suggestionsList1"> &nbsp; </div>
+                           
                       </div>
+                        <input name="from_id" class="txtboxfrm" id="txtboxfrmid" type="text" style="display: none;" >
                     </div>
 
                     <div class="frm_lbl" id="from_lbl_2">To</div>
                     <div class="frm_txt" id="frm_text_2"><input name="to" class="txtbox" id="txtbox2" type="text" size="25" onkeyup="suggest(this.value,2);" onblur="fill2();">
           <div class="suggestionsBox" id="suggestions2" style="display: none;"> 
                             <div class="suggestionList" id="suggestionsList2"> &nbsp; </div>
+                            
                         </div>
+                        <input name="from_id" class="txtboxto" id="txtboxtoid" type="text" style="display: none;">
                     </div>
 
 
