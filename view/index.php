@@ -246,7 +246,7 @@
                             <div class="suggestionList" id="suggestionsList1"> &nbsp; </div>
                            
                       </div>
-                        <input name="from_id" class="txtboxfrm" id="txtboxfrmid" type="text" style="display: none;" >
+                        <input name="sourceID" class="txtboxfrm" id="txtboxfrmid" type="text" style="display: none;" >
                     </div>
 
                     <div class="frm_lbl" id="from_lbl_2">To</div>
@@ -255,7 +255,7 @@
                             <div class="suggestionList" id="suggestionsList2"> &nbsp; </div>
                             
                         </div>
-                        <input name="from_id" class="txtboxto" id="txtboxtoid" type="text" style="display: none;">
+                        <input name="destID" class="txtboxto" id="txtboxtoid" type="text" style="display: none;">
                     </div>
 
 
