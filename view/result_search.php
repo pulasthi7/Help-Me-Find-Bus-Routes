@@ -14,114 +14,35 @@ and open the template in the editor.
 
 
         <?php
-
-        // For a single sloution
-        class Solution {
-
-            public $discription;
-            public $bus_list = array();
-            private $count = 0;
-
-            public function add_bus_item($bus) {
-                $this->count = sizeof($this->bus_list);
-                $this->bus_list[$this->count] = $bus;
-            }
-
+        include_once '../model/finders/SolutionSet.php';
+        include_once '../model/finders/Finder.php';
+        if(!isset ($_GET['sourceID']) || !$_GET['destID']){
+            //header("Location:../index.php");
+            //exit();
         }
-
-        // for a single bus in a single solution
-        class bus_item {
-
-            public $route_no;
-            public $start_from;
-            public $end_to;
-            public $geton_at;
-            public $getoff_at;
-            public $geton_longitude;
-            public $geton_latitude;
-            public $getoff_longitude;
-            public $getoff_latitude;
-
-            public function __construct($route_no, $start_from, $end_to, $geton_at, $getoff_at, $geton_longitude, $geton_latitude, $getoff_longitude, $getoff_latitude) {
-
-                $this->route_no = $route_no;
-                $this->start_from = $start_from;
-                $this->end_to = $end_to;
-                $this->geton_at = $geton_at;
-                $this->getoff_at = $getoff_at;
-                $this->geton_longitude = $geton_longitude;
-                $this->geton_latitude = $geton_latitude;
-                $this->getoff_longitude = $getoff_longitude;
-                $this->getoff_latitude = $getoff_latitude;
-            }
-
-        }
-
-        // For solution 
-
-        class solution_set {
-
-            public static $selected_index = 0;
-            public $solutions = array();
-            private $count = 0;
-
-            public function add_solution($a_solution) {
-                $this->count = sizeof($this->solutions);
-                $this->solutions[$this->count] = $a_solution;
-            }
-
-        }
-
-        // For Solution -1
-        $solution = new Solution();
-
-// $route_no,$start_from,$end_to,$geton_at,$getoff_at,$geton_longitude,$geton_latitude,$getoff_longitude,$getoff_latitude
-        $bus = new bus_item('5', 'matara', 'galle', 'matara', 'galle',  '80.5427778', '5.9486111','80.2116667', '6.0536111');
-        $solution->add_bus_item($bus);
-        $bus = new bus_item('2', 'colombo', 'galle', 'moratuwa', 'galle', '79.8477778', '6.9319444', '80.2116667', '6.0536111');
-        $solution->add_bus_item($bus);
-        $bus = new bus_item('255', 'kottawa', 'mt.lavnia', 'piliyandala', 'moratuwa', '80.2116667', '6.0536111', '79.8825', '6.7733333');
-        $solution->add_bus_item($bus);
-
-        $set_of_solutions = new solution_set();
-        $set_of_solutions->add_solution($solution);
-
-        // For Solution -2
-        $solution = new Solution();
-
-// $route_no,$start_from,$end_to,$geton_at,$getoff_at,$geton_longitude,$geton_latitude,$getoff_longitude,$getoff_latitude
-        $bus = new bus_item('255', 'kottawa', 'mt.lavnia', 'piliyandala', 'moratuwa', '80.2116667', '6.0536111', '79.8825', '6.7733333');
-        $solution->add_bus_item($bus);
-        $bus = new bus_item('5', 'galle', 'matara', 'galle', 'matara', '80.2116667', '6.0536111', '80.5427778', '5.9486111');
-        $solution->add_bus_item($bus);
-        $bus = new bus_item('2', 'colombo', 'galle', 'moratuwa', 'galle', '79.8477778', '6.9319444', '80.2116667', '6.0536111');
-        $solution->add_bus_item($bus);
-
-
+        $from = $_GET['sourceID'];
+        $to = $_GET['destID'];
+        $solutionSet = new SolutionSet();
+        $finder = new Finder();
+        $result = $finder->findRoute($from, $to);
+        array_pop($result); //remove the tail which is the source
+        $solutionSet->add_solution($result);
         
-        $set_of_solutions->add_solution($solution);
-
-
-
-        for ($x = 0; $x < sizeof($set_of_solutions->solutions); $x++) {
-
-            echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' . $x . '_buses" type="text" value="' . sizeof($set_of_solutions->solutions[$x]->bus_list) . '" readonly="true">';
-
-            for ($y = 0; $y < sizeof($set_of_solutions->solutions[$x]->bus_list); $y++) {
-
-                $current_bus = $set_of_solutions->solutions[$x]->bus_list[$y];
-
-
-
-                echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' . $x . '_bus_' . $y . '_routeno" type="text" value="' . $current_bus->route_no . '" readonly="true">';
-                echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' . $x . '_bus_' . $y . '_startfrom" type="text" value="' . $current_bus->start_from . '" readonly="true">';
-                echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' . $x . '_bus_' . $y . '_endto" type="text" value="' . $current_bus->end_to . '" readonly="true">';
-                echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' . $x . '_bus_' . $y . '_getonat" type="text" value="' . $current_bus->geton_at . '" readonly="true">';
-                echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' . $x . '_bus_' . $y . '_getoffat" type="text" value="' . $current_bus->getoff_at . '" readonly="true">';
-                echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' . $x . '_bus_' . $y . '_getonlongitude" type="text" value="' . $current_bus->geton_longitude . '" readonly="true">';
-                echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' . $x . '_bus_' . $y . '_getonlatitude" type="text" value="' . $current_bus->geton_latitude . '" readonly="true">';
-                echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' . $x . '_bus_' . $y . '_getofflongitude" type="text" value="' . $current_bus->getoff_longitude . '" readonly="true">';
-                echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' . $x . '_bus_' . $y . '_getofflatitude" type="text" value="' . $current_bus->getoff_latitude . '" readonly="true">';
+        for ($x = 0; $x < count($solutionSet->solutions); $x++) {
+            $currentSolution = $solutionSet->solutions[$x];
+            echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' .
+                    $x.'_buses" type="text" value="'.count($currentSolution).
+                    '" readonly="true">';
+            $y=0;
+            while ($current_bus = array_pop($result)) {
+                echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' . $x . '_bus_' . $y . '_routeno" type="text" value="' . $current_bus->getRouteObj()->description. '" readonly="true">';
+                echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' . $x . '_bus_' . $y . '_getonat" type="text" value="' . $current_bus->getFromObj()->name . '" readonly="true">';
+                echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' . $x . '_bus_' . $y . '_getoffat" type="text" value="' . $current_bus->getToObj()->name . '" readonly="true">';
+                echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' . $x . '_bus_' . $y . '_getonlongitude" type="text" value="' . $current_bus->getFromObj()->longitude . '" readonly="true">';
+                echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' . $x . '_bus_' . $y . '_getonlatitude" type="text" value="' . $current_bus->getFromObj()->latitude . '" readonly="true">';
+                echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' . $x . '_bus_' . $y . '_getofflongitude" type="text" value="' . $current_bus->getToObj()->longitude . '" readonly="true">';
+                echo'<input style="display:none" name="info_solution_bus_" id="info_solution_' . $x . '_bus_' . $y . '_getofflatitude" type="text" value="' . $current_bus->getToObj()->latitude . '" readonly="true">';
+                $y++;
             }
         }
         ?>
@@ -418,14 +339,14 @@ and open the template in the editor.
 
 
 <?php
-for ($i = 0; $i < sizeof($set_of_solutions->solutions); $i++) {
+for ($i = 0; $i < count($solutionSet->solutions); $i++) {
 
-    display_info($set_of_solutions->solutions[$i], $i);
+    display_info($solutionSet->solutions[$i], $i);
 }
 
 function display_info($a_solution, $index) {
     ?>
-                    <p class="heading" onclick="initialize(<?php echo($index); ?>)"><?php echo 'Solution - '.($index+1).' |  No Of Buses - '.sizeof($a_solution->bus_list); ?> </p>
+                    <p class="heading" onclick="initialize(<?php echo($index); ?>)"><?php echo 'Solution - '.($index+1).' |  No Of Buses - '.count($a_solution); ?> </p>
                     <div class="content">
                     <?php
                     echo 'Solution'.($index+1) . ' discription is here ....';
@@ -446,18 +367,16 @@ function display_info($a_solution, $index) {
 <?php
 //$route_no,$start_from,$end_to,$geton_at,$getoff_at,$geton_longitude,$geton_latitude,$getoff_longitude,$getoff_latitude
 function display_bus_list($a_solution) {
-
-    for ($i = 0; $i < sizeof($a_solution->bus_list); $i++) {
+    while ($busTour = array_pop($a_solution)) {
         ?>
                         <div class="businfo">
                             <div class="businfo_header">
-                                <div class="businfo_no">Route no <?php echo $a_solution->bus_list[$i]->route_no; ?></div>
-                                <div class="businfo_dest"><?php echo $a_solution->bus_list[$i]->start_from.' - '.$a_solution->bus_list[$i]->end_to; ?></div>
+                                <div class="businfo_no">Route no <?php echo $busTour->getRouteObj()->description; ?></div>
                             </div>
                             <div class="businfo_getin">Get In At</div>
                             <div class="businfo_getin">Get Off At</div>
-                            <div class="businfo_getin_place"><?php echo $a_solution->bus_list[$i]->geton_at ?></div>
-                            <div class="businfo_getin_place"><?php echo $a_solution->bus_list[$i]->getoff_at ?></div>
+                            <div class="businfo_getin_place"><?php echo $busTour->getFromObj()->name ?></div>
+                            <div class="businfo_getin_place"><?php echo $busTour->getToObj()->name  ?></div>
                         </div>
 
         <?php

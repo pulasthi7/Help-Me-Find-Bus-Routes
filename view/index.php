@@ -238,7 +238,7 @@
             <div id="form">
                 <div id="map"><script  src="googlemapscript.js"></script></div>
 
-<form action="#" method="post" name="form1" id="form1">
+                <form action="result_search.php" method="get" name="form1" id="form1">
                 <div id="form_detail">
                     <div class="frm_lbl" id="from_lbl_1">From</div>
                     <div class="frm_txt" id="frm_text_1"><input name="from" class="txtbox" id="txtbox1" size="25" type="text" onkeyup="suggest(this.value,1);" onblur="fill1();">
@@ -259,7 +259,7 @@
                     </div>
 
 
-                    <div class="button"><input name="go" id="go_button" type="button" value="GO !"></div>
+                    <div class="button"><input id="go_button" type="submit" value="GO !"></div>
                 </div>
                 </form>
             </div>

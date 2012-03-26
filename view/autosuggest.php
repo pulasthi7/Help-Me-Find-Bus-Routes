@@ -14,7 +14,7 @@ if (!$db) {
                 echo '<ul>';
                 $result = $db->getResults($query);
                 foreach ($result as $halt) {
-                    echo '<li onClick="fill' . $_POST['number'] . '(\'' . addslashes($halt->name) . '\',\'' . $halt->longitude . '\',\'' . $halt->latitude . '\');">' . $halt->name . '</li>';
+                    echo '<li onClick="fill'.$_POST['number'].'(\''.addslashes($halt->name).'\',\''.$halt->longitude.'\',\''.$halt->latitude.'\',\''.$halt->id.'\');">'.$halt->name.'</li>';
                 }
 
                 echo '</ul>';
