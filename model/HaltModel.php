@@ -15,8 +15,14 @@ class HaltModel{
 			return array_pop($result);
 		}
 	}
-	
-	public function getHaltsOf($route_id) {
+        
+        public function getHaltsWithLonLat($route_id){
+            $query = "SELECT halt.id, halt.longitude, halt.latitude from halt, rt_hlt WHERE rt_hlt.route_id=$route_id AND halt.id=rt_hlt.halt_id";
+            return $this->db->getResults($query);
+        }
+
+
+        public function getHaltsOf($route_id) {
 		$query = "SELECT halt.id from halt, rt_hlt WHERE rt_hlt.route_id=$route_id AND halt.id=rt_hlt.halt_id";
 		return $this->db->getResults($query,"array");
 	}

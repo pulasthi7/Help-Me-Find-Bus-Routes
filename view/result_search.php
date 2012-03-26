@@ -24,7 +24,7 @@ and open the template in the editor.
         $to = $_GET['destID'];
         $solutionSet = new SolutionSet();
         $finder = new Finder();
-        $result = $finder->findRoute($from, $to);
+        $result = $finder->findRouteWithHeuristics($from, $to);
         array_pop($result); //remove the tail which is the source
         $solutionSet->add_solution($result);
         
