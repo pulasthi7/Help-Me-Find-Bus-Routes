@@ -9,7 +9,7 @@ class HaltModel{
 	}
 	
 	public function getHalt($id) {
-		$query = "SELECT * FROM halts WHERE halts.id=$id";
+		$query = "SELECT * FROM halt WHERE halt.id=$id";
 		$result = $this->db->getResults($query);
 		if($result){
 			return array_pop($result);
