@@ -58,7 +58,7 @@ Source: http://www.bitrepository.com/web-programming/ajax/username-checker.html
                         $.ajax({
                             type: "POST",
                             url: "check_place.php",
-                            data: "username="+ usr,
+                            data: "nodeName="+ usr,
                             success: function(msg){  
 
                                 $("#status").ajaxComplete(function(event, request, settings){ 
