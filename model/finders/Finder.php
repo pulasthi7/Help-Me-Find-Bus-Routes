@@ -99,8 +99,8 @@ class Finder {
     public function findRouteWithHeuristics($from, $to) {
         $this->init();
         $destObject = $this->nodeModel->getHalt($to);
-        $dest_lon = $destObject->latitude;
-        $dest_lat = $destObject->longitude;
+        $this->dest_lon = $destObject->longitude;
+        $this->dest_lat = $destObject->latitude;
         $sourceObject = $this->nodeModel->getHalt($from);
         $this->openNodes[$from] = array("bus"=>new BusTour($from, NULL, NULL), "lon" => $sourceObject->longitude, "lat" => $sourceObject->latitude);
         $routeFound = false;
@@ -125,6 +125,28 @@ class Finder {
     }
     
     function getNearest() {
+        return $this->getNearestEuc();
+    }
+    
+    function getNearestEuc() {
+        $nearest;
+        $nearest_euc = PHP_INT_MAX;
+        $index;
+        foreach ($this->openNodes as $i=>$node) {
+            $delta_long = $node["lon"] - $this->dest_lon;
+            $delta_lat = $node["lat"] - $this->dest_lat; 
+            $cur_euc = $delta_lat * $delta_lat + $delta_long * $delta_long;
+            if($cur_euc < $nearest_euc){
+                $nearest_euc = $cur_euc;
+                $nearest = $node;
+                $index = $i;
+            }
+        }
+        unset ($this->openNodes[$index]);
+        return $nearest;
+    }
+    
+    function getNearestManhatton(){
         $nearest;
         $nearest_manhtn = PHP_INT_MAX;
         $index;
